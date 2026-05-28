@@ -8,9 +8,7 @@
 - `target_site`：Python 博客后端
 - `vuln_php_site`：PHP 漏洞测试后端
 - `ids_site`：Flask 编写的 IDS 平台与 Proxy 网关
-- `ml_lab`：独立机器学习实验目录
-- `ids_backend_django`：并行迁移中的 Django API 后端
-- `ids_frontend_vue`：并行迁移中的 Vue 3 前端
+
 
 ## 当前主系统运行链路
 
@@ -28,10 +26,6 @@
 ├── run.py
 ├── requirements.txt
 ├── rebuild_venv.sh
-├── ids_accuracy_benchmark.py
-├── ids_accuracy_benchmark_program2.py
-├── ids_accuracy_benchmark_program3.py
-├── ids_accuracy_benchmark_program4.py
 ├── target_site/
 │   ├── app.py
 │   ├── templates/
@@ -59,17 +53,7 @@
 │   ├── redirect.php
 │   ├── login.php
 │   ├── common.php
-│   └── deploy/
-├── ids_backend_django/
-│   └── ...
-├── ids_frontend_vue/
-│   └── ...
-└── ml_lab/
-    ├── README.md
-    ├── scripts/
-    ├── datasets/
-    ├── models/
-    └── docs/
+└──   └── deploy/
 ```
 
 ## 运行环境
@@ -263,36 +247,6 @@ PHP 漏洞测试后端，用于生成典型 Web 攻击流量。当前主要页�
 - `enable_ml_assist=false`：完全关闭 ML 推理
 - `ml_apply_fusion_as_primary=false`：即使融合完成，也仍保留规则结果作为主判
 
-## 机器学习离线验证
-
-阶段 1 已收口为一条总命令，默认会基于最新数据集：
-
-1. 训练朴素贝叶斯
-2. 训练逻辑回归
-3. 训练随机森林
-4. 输出准确率、召回率、F1 对比
-5. 生成混淆矩阵 CSV
-6. 自动选择验证集最优模型
-
-运行命令：
-
-```bash
-./.venv/bin/python /Users/pyy/Desktop/毕业设计/项目根目录/ml_lab/scripts/run_phase1_validation.py
-```
-
-输出目录示例：
-
-- `ml_lab/models/dataset_*/model_comparison.txt`
-- `ml_lab/models/dataset_*/best_model.json`
-- `ml_lab/models/dataset_*/phase1_validation_summary.txt`
-- `ml_lab/models/dataset_*/*_confusion_matrix.csv`
-
-## IDS 在线推理说明
-
-在线推理模块位于：
-
-- [ml_inference.py](/Users/pyy/Desktop/毕业设计/项目根目录/ids_site/ml_inference.py)
-- [ml_fusion.py](/Users/pyy/Desktop/毕业设计/项目根目录/ids_site/ml_fusion.py)
 
 当前 `/api/collect` 处理链已经扩展为：
 
@@ -303,9 +257,3 @@ PHP 漏洞测试后端，用于生成典型 Web 攻击流量。当前主要页�
 5. 规则 + ML 融合
 6. 事件入库
 7. 自动封禁判断
-
-在线推理默认优先使用：
-
-- `ml_model_name=random_forest`
-
-并自动从 `ml_lab/models/dataset_*` 中选择最新可用模型文件。
