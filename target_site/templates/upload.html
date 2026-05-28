@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>上传文章 - My Blog</title>
+  <style>
+    :root{
+      --bg:#f5f5f7; --card-bg:rgba(255,255,255,.72);
+      --border:rgba(0,0,0,.06);
+      --text:#1d1d1f; --muted:#6e6e73;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --blue:#0071e3; --danger:#ff5a6a;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1220; --card-bg:rgba(17,26,46,.72);
+        --border:rgba(255,255,255,.08);
+        --text:#eaf1ff; --muted:#8aa0c2;
+        --shadow:0 14px 40px rgba(0,0,0,.45);
+        --blue:#6ea8ff;
+      }
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .navbar{
+      position:sticky; top:0; z-index:10;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 60px;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .logo{font-size:18px;font-weight:650;letter-spacing:-0.3px;text-decoration:none;color:var(--text)}
+    .nav-links a{
+      margin-left:18px;text-decoration:none;color:var(--muted);
+      font-size:14px;padding:8px 10px;border-radius:999px;transition:.2s;
+    }
+    .nav-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+    .container{max-width:980px;margin:0 auto;padding:34px 20px}
+    .card{
+      border:1px solid var(--border);
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      padding:22px;
+      max-width:520px;
+    }
+    h1{margin:0;font-size:22px;font-weight:780;letter-spacing:-0.6px}
+    p{margin:10px 0 16px;color:var(--muted);font-size:14px;line-height:1.6}
+    label{display:block;margin:12px 0 6px;color:var(--muted);font-size:13px}
+    input{
+      width:100%; padding:12px; border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.85);
+      color:var(--text); outline:none;
+    }
+    input:focus{border-color:rgba(0,113,227,.35); box-shadow:0 0 0 4px rgba(0,113,227,.12)}
+    .btn{
+      width:100%; margin-top:16px;
+      padding:12px 14px; border:none; border-radius:12px;
+      background: linear-gradient(180deg, rgba(0,113,227,1), rgba(0,95,204,1));
+      color:#fff; font-weight:750; cursor:pointer;
+    }
+    .err{
+      margin-top:12px; padding:10px 12px; border-radius:12px;
+      border:1px solid rgba(255,90,106,.22);
+      background: rgba(255,90,106,.10);
+      color: #b4232d; font-size:13px;
+    }
+    .hint{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.6}
+    @media (max-width: 960px){ .navbar{padding:16px 18px;} }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <a class="logo" href="/">My Blog</a>
+  <div class="nav-links">
+    <a href="/playground">功能实验区</a>
+    <a href="/admin">后台</a>
+    <a href="/logout">退出</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1>上传文章</h1>
+    <p>上传 txt/md/pdf 或图片文件。txt/md 会自动读取内容作为文章正文。</p>
+
+    <form action="/admin/upload" method="POST" enctype="multipart/form-data">
+      <label>文章标题</label>
+      <input name="title" placeholder="请输入文章标题" />
+
+      <label>选择文件</label>
+      <input name="file" type="file" />
+
+      <button class="btn" type="submit">上传并生成文章</button>
+
+      {% if error %}
+        <div class="err">{{ error }}</div>
+      {% endif %}
+    </form>
+
+    <div class="hint">
+      支持：txt / md / pdf / png / jpg / jpeg<br/>
+      说明：pdf/图片暂不解析内容，会生成下载链接。
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

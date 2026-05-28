@@ -1,0 +1,60 @@
+{% extends "vuln_base.html" %}
+
+{% block content %}
+<section class="panel">
+  <h2>{{ page_title }}</h2>
+  <p>{{ intro }}</p>
+  <form method="post" enctype="multipart/form-data" id="vuln-upload-form" action="/admin/media/upload">
+    <label>
+      保存文件名（可选）
+      <input id="filename-field" type="text" name="filename_hint" value="{{ filename_value }}" placeholder="avatar.jpg.py 或 media_backup.phtml">
+    </label>
+    <label>
+      选择文件
+      <input id="file-field" type="file" name="file">
+    </label>
+    <div class="button-row">
+      <button type="submit">上传文件</button>
+      <a class="back-link" href="/admin/media/upload">重置</a>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>快速测试</h2>
+  <p class="muted">建议配合双扩展或脚本风格文件名测试，例如 <code>avatar.jpg.py</code>、<code>backup.phtml</code>、<code>media.jsp</code>。</p>
+  <div class="examples">
+    {% for label, href in examples %}
+      <a class="example-link" href="{{ href }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+{% if message %}
+<section class="panel">
+  <h2>上传结果</h2>
+  <div class="success">{{ message }}</div>
+  {% if saved_path %}
+    <div class="link-list">
+      <a href="{{ saved_path }}">打开已上传文件</a>
+    </div>
+  {% endif %}
+</section>
+{% endif %}
+
+<script>
+document.getElementById("vuln-upload-form").addEventListener("submit", function () {
+  const fileInput = document.getElementById("file-field");
+  const nameField = document.getElementById("filename-field");
+  const params = new URLSearchParams(window.location.search);
+  let filename = nameField.value.trim();
+  if (!filename && fileInput.files.length > 0) {
+    filename = fileInput.files[0].name;
+  }
+  if (filename) {
+    params.set("filename", filename);
+  }
+  this.action = "/admin/media/upload?" + params.toString();
+});
+</script>
+{% endblock %}

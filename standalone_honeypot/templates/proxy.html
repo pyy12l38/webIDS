@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Upstream Fetch Proxy{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">SSRF Trap</div>
+  <h1>Upstream Fetch Proxy</h1>
+  <p>这个页面会诱导用户输入外部 URL，并把目标记录下来。常见 SSRF 目标会返回伪造响应。</p>
+</section>
+
+<section class="panel">
+  <h2>Fetch Remote Resource</h2>
+  <form method="get">
+    <label>Target URL</label>
+    <input type="text" name="url" value="{{ target }}" placeholder="http://169.254.169.254/latest/meta-data/">
+    <div style="margin-top: 14px;">
+      <button class="button" type="submit">Fetch</button>
+    </div>
+  </form>
+  <div style="margin-top: 16px;">
+    <label>Response</label>
+    <div class="code">{{ response_text or "waiting for target url" }}</div>
+  </div>
+</section>
+{% endblock %}

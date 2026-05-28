@@ -1,0 +1,80 @@
+{% extends "vuln_base.html" %}
+
+{% block content %}
+<section class="panel">
+  <h2>{{ page_title }}</h2>
+  <p>{{ intro }}</p>
+
+  {% if fields %}
+  <form method="{{ form_method or 'get' }}" action="{{ form_action or request.path }}" {% if form_id %}id="{{ form_id }}"{% endif %} {% if form_enctype %}enctype="{{ form_enctype }}"{% endif %}>
+    {% for field in fields %}
+      {% if field.type == "hidden" %}
+        <input type="hidden" name="{{ field.name }}" value="{{ field.value }}">
+      {% else %}
+      <label>
+        {{ field.label }}
+        {% if field.type == "textarea" %}
+          <textarea id="field-{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder }}">{{ field.value }}</textarea>
+        {% elif field.type == "file" %}
+          <input id="field-{{ field.name }}" type="file" name="{{ field.name }}">
+        {% else %}
+          <input id="field-{{ field.name }}" type="{{ field.type or 'text' }}" name="{{ field.name }}" value="{{ field.value }}" placeholder="{{ field.placeholder }}">
+        {% endif %}
+      </label>
+      {% endif %}
+    {% endfor %}
+
+    <div class="button-row">
+      <button type="submit">提交请求</button>
+      <a class="back-link" href="{{ form_action or request.path }}">重置</a>
+    </div>
+  </form>
+  {% endif %}
+</section>
+
+{% if examples %}
+<section class="panel">
+  <h2>快速测试</h2>
+  <div class="examples">
+    {% for label, href in examples %}
+      <a class="example-link" href="{{ href }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if result_text %}
+<section class="panel">
+  <h2>{{ result_title or "输出结果" }}</h2>
+  {% if result_kind == "notice" %}
+    <div class="notice">{{ result_text }}</div>
+  {% elif result_kind == "success" %}
+    <div class="success">{{ result_text }}</div>
+  {% else %}
+    <pre>{{ result_text }}</pre>
+  {% endif %}
+
+  {% if unsafe_preview %}
+    <div class="notice" style="margin-top: 12px;">下面内容未经过滤，浏览器会直接解析：</div>
+    <div style="margin-top:12px">{{ unsafe_preview|safe }}</div>
+  {% endif %}
+{% elif unsafe_preview %}
+<section class="panel">
+  <h2>{{ result_title or "危险输出结果" }}</h2>
+  <div class="notice">下面内容未经过滤，浏览器会直接解析：</div>
+  <div style="margin-top:12px">{{ unsafe_preview|safe }}</div>
+</section>
+{% endif %}
+
+{% if extra_html %}
+<section class="panel">
+  {{ extra_html|safe }}
+</section>
+{% endif %}
+
+{% if page_script %}
+<script>
+{{ page_script|safe }}
+</script>
+{% endif %}
+{% endblock %}

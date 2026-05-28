@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ article.title }} - My Blog</title>
+
+  <style>
+    :root{
+      --bg:#f5f5f7;
+      --card-bg:rgba(255,255,255,.65);
+      --border:rgba(0,0,0,.06);
+      --text:#1d1d1f;
+      --muted:#6e6e73;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --blue:#0071e3;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+      color:var(--text);
+    }
+    .navbar{
+      position: sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 60px;
+      backdrop-filter: blur(18px);
+      background: rgba(245,245,247,.75);
+      border-bottom:1px solid var(--border);
+    }
+    .logo{
+      font-size:18px;
+      font-weight:600;
+      letter-spacing:-0.3px;
+      text-decoration:none;
+      color:var(--text);
+    }
+    .nav-links a{
+      margin-left:18px;
+      text-decoration:none;
+      color:var(--muted);
+      font-size:14px;
+      transition:.2s;
+    }
+    .nav-links a:hover{ color:var(--text); }
+
+    .container{
+      max-width: 980px;
+      margin:0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .card{
+      backdrop-filter: blur(18px);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .title{
+      margin:0;
+      font-size:34px;
+      font-weight:750;
+      letter-spacing:-0.8px;
+    }
+    .meta{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .content{
+      margin-top:18px;
+      font-size:16px;
+      line-height:1.85;
+      color:var(--text);
+      white-space: pre-wrap;
+    }
+
+    .actions{
+      margin-top:22px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.8);
+      color:var(--text);
+      text-decoration:none;
+      font-size:14px;
+      transition:.2s;
+      cursor:pointer;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.10);
+    }
+    .btn.primary{
+      border-color: rgba(0,113,227,.25);
+      background: rgba(0,113,227,.10);
+      color: var(--blue);
+      font-weight:650;
+    }
+
+    .section{
+      margin-top: 22px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+    }
+    .comment{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.72);
+      margin-top: 12px;
+    }
+    .comment-meta{
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .comment-body{
+      line-height: 1.8;
+      word-break: break-word;
+    }
+    .comment-form{
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .comment-form label{
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .comment-form input,
+    .comment-form textarea{
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.88);
+      color: var(--text);
+      outline: none;
+      font: inherit;
+    }
+    .comment-form textarea{
+      min-height: 120px;
+      resize: vertical;
+    }
+    .comment-form input:focus,
+    .comment-form textarea:focus{
+      border-color: rgba(0,113,227,.35);
+      box-shadow: 0 0 0 4px rgba(0,113,227,.12);
+    }
+
+    @media (max-width: 960px){
+      .navbar{ padding:16px 18px; }
+      .title{ font-size:26px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <a class="logo" href="/">My Blog</a>
+    <div class="nav-links">
+      <a href="/playground">功能实验区</a>
+      {% if logged_in %}
+        <a href="/admin">后台</a>
+        <a href="/logout">退出</a>
+      {% else %}
+        <a href="/login">登录</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <h1 class="title">{{ article.title }}</h1>
+      <div class="meta">发布时间：{{ article.time }}</div>
+
+      <div class="content">{{ article.content }}</div>
+
+      {% if article.file_name %}
+      <div class="actions" style="margin-top: 10px;">
+        <a class="btn" href="/admin/files/{{ article.file_name }}">下载附件</a>
+      </div>
+      {% endif %}
+
+      <div class="actions">
+        <a class="btn primary" href="/">← 返回文章列表</a>
+        {% if logged_in %}
+          <a class="btn" href="/admin">进入后台</a>
+        {% else %}
+          <a class="btn" href="/login">登录后台</a>
+        {% endif %}
+      </div>
+
+      <div class="section" id="comments">
+        <h2>评论区</h2>
+        <div class="meta" style="margin-top:0;">为了配合 IDS 演示，这里的评论正文会按原样输出，不做 HTML 转义，可用于测试评论预览和存储型 XSS。</div>
+
+        {% if comments %}
+          {% for comment in comments %}
+            <div class="comment">
+              <div class="comment-meta">{{ comment.author }} · {{ comment.time }}</div>
+              <div class="comment-body">{{ comment.body|safe }}</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="meta" style="margin-top: 14px;">还没有评论，欢迎发表第一条留言。</div>
+        {% endif %}
+
+        <form class="comment-form" action="/article/{{ article_id }}/comment" method="post">
+          <label>
+            昵称
+            <input name="author" placeholder="例如：guest123">
+          </label>
+          <label>
+            评论内容
+            <textarea name="body" placeholder="输入评论内容，例如 <script>alert(1)</script>"></textarea>
+          </label>
+          <button class="btn primary" type="submit">提交评论</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

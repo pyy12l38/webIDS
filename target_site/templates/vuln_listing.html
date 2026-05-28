@@ -1,0 +1,18 @@
+{% extends "vuln_base.html" %}
+
+{% block content %}
+<section class="panel">
+  <h2>{{ page_title }}</h2>
+  <p>{{ intro }}</p>
+
+  {% if items %}
+    <div class="link-list">
+      {% for item in items %}
+        <a href="{{ item.url }}">{{ item.name }}</a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="notice">当前上传目录为空，可以先到 <a href="/admin/media/upload">媒体上传中心</a> 提交一个带危险扩展名的文件。</div>
+  {% endif %}
+</section>
+{% endblock %}

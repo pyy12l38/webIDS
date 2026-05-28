@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>后台管理 - My Blog</title>
+
+  <style>
+    :root{
+      /* Light */
+      --bg:#f5f5f7;
+      --bg2:#ffffff;
+      --card-bg:rgba(255,255,255,.72);
+      --border:rgba(0,0,0,.06);
+      --text:#1d1d1f;
+      --muted:#6e6e73;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --shadow2:0 16px 40px rgba(0,0,0,.12);
+      --blue:#0071e3;
+      --chip:rgba(0,0,0,.04);
+      --ok:#2ecc71;
+    }
+
+    /* Dark auto */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1220;
+        --bg2:#0b1220;
+        --card-bg:rgba(17,26,46,.72);
+        --border:rgba(255,255,255,.08);
+        --text:#eaf1ff;
+        --muted:#8aa0c2;
+        --shadow:0 14px 40px rgba(0,0,0,.45);
+        --shadow2:0 20px 60px rgba(0,0,0,.55);
+        --blue:#6ea8ff;
+        --chip:rgba(255,255,255,.06);
+        --ok:#37d67a;
+      }
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, color-mix(in oklab, var(--blue) 14%, transparent), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      min-height:100vh;
+    }
+
+    /* Nav（与首页一致） */
+    .navbar{
+      position: sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 60px;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .logo{
+      font-size:18px;
+      font-weight:650;
+      letter-spacing:-0.3px;
+      text-decoration:none;
+      color:var(--text);
+    }
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .nav-links a{
+      text-decoration:none;
+      color:var(--muted);
+      font-size:14px;
+      padding:8px 10px;
+      border-radius:999px;
+      transition:.2s;
+    }
+    .nav-links a:hover{
+      color:var(--text);
+      background: var(--chip);
+    }
+
+    .container{
+      max-width: 1040px;
+      margin:0 auto;
+      padding: 26px 20px 70px;
+    }
+
+    /* Header */
+    .header{
+      padding: 34px 0 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .header h1{
+      margin:0;
+      font-size:34px;
+      font-weight:780;
+      letter-spacing:-0.8px;
+      line-height:1.1;
+    }
+    .header p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card-bg) 75%, transparent);
+      color:var(--text);
+      text-decoration:none;
+      font-size:14px;
+      transition:.2s;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow2);
+    }
+    .btn.primary{
+      border-color: color-mix(in srgb, var(--blue) 30%, var(--border));
+      background: color-mix(in srgb, var(--blue) 14%, var(--card-bg));
+      color: var(--blue);
+      font-weight:650;
+    }
+
+    /* Cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){
+      .navbar{ padding:16px 18px; }
+      .header h1{ font-size:26px; }
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border:1px solid var(--border);
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px 16px 14px;
+      transition:.25s;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      box-shadow: var(--shadow2);
+    }
+    .k{
+      margin:0 0 8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .v{
+      margin:0;
+      font-size:26px;
+      font-weight:780;
+      letter-spacing:-0.6px;
+    }
+    .v.ok{ color: var(--ok); }
+
+    /* Table panel */
+    .panel{
+      margin-top: 18px;
+      border:1px solid var(--border);
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-head h2{
+      margin:0;
+      font-size:15px;
+      font-weight:700;
+      letter-spacing:-0.2px;
+    }
+    .panel-head .hint{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+    }
+    th, td{
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align:left;
+      font-size:14px;
+    }
+    th{
+      color:var(--muted);
+      font-weight:650;
+      background: color-mix(in srgb, var(--card-bg) 85%, transparent);
+    }
+    tr:hover td{
+      background: color-mix(in srgb, var(--chip) 60%, transparent);
+    }
+
+    .tag{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card-bg) 75%, transparent);
+      color:var(--muted);
+    }
+
+    .footer{
+      text-align:center;
+      padding: 26px 0 10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 统一导航 -->
+  <div class="navbar">
+    <a class="logo" href="/">My Blog</a>
+    <div class="nav-links">
+      <a href="/">前台</a>
+      <a href="/playground">功能实验区</a>
+      <a href="/admin/upload">上传文章</a>
+      <a href="/logout">退出</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- 标题区 -->
+    <div class="header">
+      <div>
+        <h1>后台管理</h1>
+        <p>欢迎，<b>{{ user }}</b> ｜ 登录时间：{{ login_time }}</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn primary" href="/admin/upload">＋ 上传文章</a>
+        <a class="btn" href="/">返回首页</a>
+      </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="grid">
+      <div class="card">
+        <p class="k">文章数量</p>
+        <p class="v">{{ article_count }}</p>
+      </div>
+      <div class="card">
+        <p class="k">系统状态</p>
+        <p class="v ok">RUNNING</p>
+      </div>
+      <div class="card">
+        <p class="k">权限</p>
+        <p class="v">Admin</p>
+      </div>
+    </div>
+
+    <!-- 文章列表 -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>文章列表</h2>
+        <p class="hint">当前为 Demo（后续可扩展：编辑 / 删除 / 数据库持久化）</p>
+      </div>
+
+      <table>
+        <tr>
+          <th style="width:110px;">ID</th>
+          <th>标题</th>
+          <th style="width:160px;">时间</th>
+          <th style="width:140px;">状态</th>
+        </tr>
+
+        {% for id, article in articles.items() %}
+        <tr>
+          <td>#{{ id }}</td>
+          <td>
+            <a href="/article/{{ id }}" style="color: var(--text); text-decoration:none; font-weight:650;">
+              {{ article.title }}
+            </a>
+          </td>
+          <td>{{ article.time }}</td>
+          <td><span class="tag">已发布</span></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="footer">© 2026 My Blog · Admin</div>
+  </div>
+</body>
+</html>

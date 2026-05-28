@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Honeypot Console{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">Private Console</div>
+  <h1>Recent Captures</h1>
+  <p>这里展示最近命中的凭证、命令、探测路径、上传文件和 SSRF 目标。</p>
+</section>
+
+<section class="panel">
+  <h2>Captures</h2>
+  {% if captures %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>时间</th>
+        <th>分类</th>
+        <th>概要</th>
+        <th>来源</th>
+        <th>详情</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in captures %}
+      <tr>
+        <td>{{ item.time }}</td>
+        <td><span class="tag">{{ item.category }}</span></td>
+        <td>{{ item.summary }}</td>
+        <td>{{ item.ip }}<br><span class="muted">{{ item.method }} {{ item.path }}</span></td>
+        <td><div class="code">{{ item.details_text }}</div></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">还没有捕获记录。</p>
+  {% endif %}
+</section>
+{% endblock %}

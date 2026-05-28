@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Firmware Upload Center{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">File Trap</div>
+  <h1>Firmware Upload Center</h1>
+  <p>伪装成固件升级入口，适合观察脚本扩展名、双扩展和木马文件投递。</p>
+</section>
+
+<section class="panel">
+  <h2>Upload Package</h2>
+  <form method="post" enctype="multipart/form-data">
+    <label>Firmware package</label>
+    <input type="file" name="file">
+    <div style="margin-top: 14px;">
+      <button class="button" type="submit">Queue Upload</button>
+    </div>
+  </form>
+  {% if message %}
+  <div class="notice">{{ message }}</div>
+  {% endif %}
+  {% if saved_name %}
+  <p class="muted">Saved as: {{ saved_name }}</p>
+  {% endif %}
+</section>
+{% endblock %}

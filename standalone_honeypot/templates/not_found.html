@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}404 Not Found{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">Missing Resource</div>
+  <h1>404</h1>
+  <p>The requested resource {{ path }} was not found on this node.</p>
+</section>
+{% endblock %}

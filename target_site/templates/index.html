@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Blog</title>
+
+  <style>
+    :root{
+      /* Light */
+      --bg: #f5f5f7;
+      --bg2:#ffffff;
+      --card-bg: rgba(255,255,255,.70);
+      --border: rgba(0,0,0,.06);
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --shadow2: 0 16px 40px rgba(0,0,0,.12);
+      --blue:#0071e3;
+      --chip: rgba(0,0,0,.04);
+
+      /* Hero gradient */
+      --g1:#0071e3;
+      --g2:#7c3aed;
+      --g3:#ff2d55;
+    }
+
+    /* Dark auto */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1220;
+        --bg2:#0b1220;
+        --card-bg: rgba(17,26,46,.72);
+        --border: rgba(255,255,255,.08);
+        --text:#eaf1ff;
+        --muted:#8aa0c2;
+        --shadow: 0 14px 40px rgba(0,0,0,.45);
+        --shadow2: 0 20px 60px rgba(0,0,0,.55);
+        --blue:#6ea8ff;
+        --chip: rgba(255,255,255,.06);
+
+        --g1:#6ea8ff;
+        --g2:#b38bff;
+        --g3:#ff7aa2;
+      }
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, color-mix(in oklab, var(--g1) 18%, transparent), transparent 60%),
+        radial-gradient(900px 500px at 80% 90%, color-mix(in oklab, var(--g3) 14%, transparent), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      min-height:100vh;
+    }
+
+    /* Nav */
+    .navbar{
+      position: sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 60px;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .logo{
+      font-size:18px;
+      font-weight:650;
+      letter-spacing:-0.3px;
+      text-decoration:none;
+      color:var(--text);
+    }
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .nav-links a{
+      text-decoration:none;
+      color:var(--muted);
+      font-size:14px;
+      transition:.2s;
+      padding:8px 10px;
+      border-radius:999px;
+    }
+    .nav-links a:hover{
+      color:var(--text);
+      background: var(--chip);
+    }
+
+    .container{
+      max-width: 1040px;
+      margin:0 auto;
+      padding: 26px 20px 70px;
+    }
+
+    /* Hero */
+    .hero{
+      padding: 54px 0 18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    /* Big gradient title + subtle animation */
+    .hero h1{
+      margin:0;
+      font-size:52px;
+      letter-spacing:-1.2px;
+      line-height:1.05;
+      font-weight:780;
+
+      background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3));
+      background-size: 200% 200%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+
+      animation: gradientMove 6s ease-in-out infinite;
+    }
+    @keyframes gradientMove{
+      0%{ background-position: 0% 50%; }
+      50%{ background-position: 100% 50%; }
+      100%{ background-position: 0% 50%; }
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.65;
+      max-width: 720px;
+    }
+
+    /* Search */
+    .search-row{
+      margin-top: 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .search{
+      flex: 1 1 420px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      transition:.2s;
+    }
+    .search:focus-within{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow2);
+    }
+    .search input{
+      width:100%;
+      border:none;
+      outline:none;
+      background: transparent;
+      color:var(--text);
+      font-size:14px;
+    }
+    .kbd{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius:10px;
+      padding: 4px 8px;
+      background: color-mix(in srgb, var(--card-bg) 70%, transparent);
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .tag{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card-bg) 75%, transparent);
+      padding: 6px 10px;
+      border-radius:999px;
+    }
+
+    /* Cards grid */
+    .grid{
+      margin-top: 24px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px){
+      .navbar{ padding:16px 18px; }
+      .hero h1{ font-size:38px; }
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border:1px solid var(--border);
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, box-shadow .25s ease;
+      will-change: transform;
+    }
+    .card:hover{
+      transform: translateY(-5px);
+      box-shadow: var(--shadow2);
+    }
+
+    /* Auto generated cover (gradient block) */
+    .cover{
+      height: 140px;
+      position: relative;
+      overflow:hidden;
+    }
+    .cover::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(closest-side at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+                  radial-gradient(closest-side at 70% 60%, rgba(255,255,255,.35), transparent 55%),
+                  linear-gradient(120deg, rgba(0,113,227,.9), rgba(124,58,237,.85), rgba(255,45,85,.85));
+      transform: rotate(-8deg);
+      filter: saturate(1.05);
+    }
+    /* Different themes per card via CSS variable */
+    .cover[data-theme="1"]::before{ background: radial-gradient(closest-side at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+                                           radial-gradient(closest-side at 70% 60%, rgba(255,255,255,.35), transparent 55%),
+                                           linear-gradient(120deg, #0071e3, #7c3aed, #ff2d55); }
+    .cover[data-theme="2"]::before{ background: radial-gradient(closest-side at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+                                           radial-gradient(closest-side at 70% 60%, rgba(255,255,255,.35), transparent 55%),
+                                           linear-gradient(120deg, #34c759, #0a84ff, #bf5af2); }
+    .cover[data-theme="3"]::before{ background: radial-gradient(closest-side at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+                                           radial-gradient(closest-side at 70% 60%, rgba(255,255,255,.35), transparent 55%),
+                                           linear-gradient(120deg, #ff9f0a, #ff375f, #5e5ce6); }
+    .cover[data-theme="4"]::before{ background: radial-gradient(closest-side at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+                                           radial-gradient(closest-side at 70% 60%, rgba(255,255,255,.35), transparent 55%),
+                                           linear-gradient(120deg, #00c7be, #0a84ff, #ff2d55); }
+
+    .content{
+      padding: 18px 18px 16px;
+    }
+    .title{
+      margin:0;
+      font-size:18px;
+      font-weight:720;
+      letter-spacing:-0.4px;
+    }
+    .meta{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .actions{
+      margin-top: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .link{
+      color:var(--blue);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:650;
+    }
+    .link:hover{ text-decoration:underline; }
+    .chip{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--card-bg) 75%, transparent);
+      padding: 5px 10px;
+      border-radius:999px;
+    }
+
+    .empty{
+      margin-top: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      color: var(--muted);
+      background: color-mix(in srgb, var(--card-bg) 55%, transparent);
+    }
+
+    .footer{
+      text-align:center;
+      padding: 30px 0 10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <a class="logo" href="/">My Blog</a>
+    <div class="nav-links">
+      <a href="/playground">功能实验区</a>
+      {% if logged_in %}
+        <a href="/admin">后台</a>
+        <a href="/logout">退出</a>
+      {% else %}
+        <a href="/login">登录</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero">
+      <h1>记录技术与思考</h1>
+      <p>苹果风极简博客首页：渐变标题、微动效、自动卡片封面、夜间模式自适应、搜索过滤文章，并新增 Python 博客功能实验区，用真实功能点生成 IDS 攻击样本。</p>
+
+      <div class="search-row">
+        <div class="search" id="searchBox">
+          <!-- 简单 SVG 放大镜图标 -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 21l-4.3-4.3m1.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="searchInput" placeholder="搜索文章标题…（按 / 快速聚焦）" autocomplete="off"/>
+          <span class="kbd">/</span>
+        </div>
+
+        <div class="pill">
+          <span class="tag">自动夜间模式</span>
+          <span class="tag">毛玻璃卡片</span>
+          <span class="tag">占位封面图</span>
+          <span class="tag">Python 博客功能实验区</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px; padding: 22px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+        <div>
+          <h2 class="title" style="margin-bottom: 8px;">新增 Python 博客功能实验区</h2>
+          <div class="meta" style="margin-top:0;">用搜索、评论、媒体上传、模板预览、XML 导入和远程内容预览等真实博客功能，生成 Flask 侧的 SQLi、XSS、RCE、SSRF、XXE、SSTI、NoSQL、上传和敏感路径攻击样本。</div>
+        </div>
+        <a class="link" href="/playground">进入实验区 →</a>
+      </div>
+      <div class="pill" style="margin-top: 14px;">
+        {% for card in vuln_cards %}
+          <span class="tag">{{ card.title }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 文章卡片列表 -->
+    <div class="grid" id="cardsGrid">
+      {% for id, article in articles.items() %}
+      <div class="card" data-title="{{ article.title | lower }}">
+        <!-- 封面：自动占位（按 id 轮换主题） -->
+        <div class="cover" data-theme="{{ (id % 4) + 1 }}"></div>
+
+        <div class="content">
+          <h2 class="title">{{ article.title }}</h2>
+          <div class="meta">发布时间：{{ article.time }}</div>
+
+          <div class="actions">
+            <a class="link" href="/article/{{ id }}">阅读文章 →</a>
+            <span class="chip">#{{ id }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- 搜索为空提示 -->
+    <div class="empty" id="emptyBox" style="display:none;">
+      没找到匹配的文章。试试换个关键词～
+    </div>
+
+    <div class="footer">© 2026 My Blog · Built with Flask</div>
+  </div>
+
+  <script>
+    // ===== 搜索功能：按标题过滤卡片 =====
+    const input = document.getElementById("searchInput");
+    const cards = Array.from(document.querySelectorAll(".card"));
+    const emptyBox = document.getElementById("emptyBox");
+
+    function filterCards() {
+      const q = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const title = card.getAttribute("data-title") || "";
+        const ok = title.includes(q);
+        card.style.display = ok ? "" : "none";
+        if (ok) visible++;
+      });
+
+      emptyBox.style.display = (visible === 0) ? "" : "none";
+    }
+
+    input.addEventListener("input", filterCards);
+
+    // 按 "/" 快速聚焦搜索框（像很多产品的快捷键一样）
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "/" && document.activeElement !== input) {
+        e.preventDefault();
+        input.focus();
+      }
+      if (e.key === "Escape") {
+        input.value = "";
+        filterCards();
+        input.blur();
+      }
+    });
+
+    // 页面加载后先跑一次（防止有默认值）
+    filterCards();
+
+    // ===== 卡片微动效：根据鼠标位置轻微倾斜（很克制）=====
+    // 只在支持 hover 的设备上启用
+    const canHover = window.matchMedia("(hover:hover)").matches;
+    if (canHover) {
+      cards.forEach(card => {
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;   // 0~1
+          const y = (e.clientY - rect.top) / rect.height;   // 0~1
+          const rx = (0.5 - y) * 4; // 角度小一点，苹果风克制
+          const ry = (x - 0.5) * 4;
+          card.style.transform = `translateY(-5px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "";
+        });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Edge Gateway Control Plane{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">Edge Access Gateway</div>
+  <h1>Production Control Plane</h1>
+  <p>
+    这是一个独立运行的 Web 蜜罐。它伪装成边缘网关管理台、数据库入口、调试代理和上传中心，
+    会把访问记录与高价值交互写入本地日志，方便你观察扫描、爆破、命令探测和文件投递行为。
+  </p>
+</section>
+
+<section class="grid">
+  {% for card in cards %}
+  <a class="card" href="{{ card.href }}">
+    <h3>{{ card.title }}</h3>
+    <p>{{ card.desc }}</p>
+    <div class="tag">Open</div>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="panel">
+  <h2>常见诱饵路径</h2>
+  <div class="code">/admin/login
+/phpmyadmin
+/wp-login.php
+/shell?cmd=whoami
+/upload
+/api/proxy?url=http://169.254.169.254/latest/meta-data/
+/.env
+/.git/config
+/backup.zip</div>
+  <p class="muted">控制台路径是 <code>/__console__?token={{ console_token }}</code>。部署到公网时建议先改 `HONEYPOT_CONSOLE_TOKEN`。</p>
+</section>
+{% endblock %}

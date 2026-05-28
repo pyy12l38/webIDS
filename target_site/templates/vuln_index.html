@@ -1,0 +1,23 @@
+{% extends "vuln_base.html" %}
+
+{% block content %}
+<section class="panel">
+  <h2>站点说明</h2>
+  <p>这是毕业设计中的 Python 博客功能实验区。它不是单独的 PHP 漏洞页集合，而是把搜索、评论、媒体上传、模板预览、远程内容预览、XML 导入、成员筛选等博客后台常见功能保留下来，并刻意使用较弱的输入处理来生成可被当前 Web IDS 规则识别的攻击流量。</p>
+  <div class="notice">当前重点覆盖：SQLi、XSS、RCE、文件上传、路径穿越、SSRF、XXE、SSTI、NoSQL、参数篡改、敏感路径、认证爆破、扫描探测、开放重定向，并补充一键批量流量生成入口。</div>
+</section>
+
+<section class="grid">
+  {% for card in cards %}
+    <article class="panel">
+      <h2>{{ card.title }}</h2>
+      <p>{{ card.desc }}</p>
+      <div class="examples">
+        {% for label, href in card.links %}
+          <a class="example-link" href="{{ href }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

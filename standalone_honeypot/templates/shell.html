@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Remote Diagnostic Console{% endblock %}
+
+{% block body %}
+<section class="hero">
+  <div class="eyebrow">Command Trap</div>
+  <h1>Remote Diagnostic Console</h1>
+  <p>Legacy troubleshooting module. Useful for观察命令执行类探测与 web shell 行为。</p>
+</section>
+
+<section class="panel">
+  <h2>Execute Command</h2>
+  <form method="post">
+    <label>Command</label>
+    <input type="text" name="cmd" value="{{ command }}" placeholder="whoami">
+    <div style="margin-top: 14px;">
+      <button class="button secondary" type="submit">Run</button>
+    </div>
+  </form>
+  <div style="margin-top: 16px;">
+    <label>Output</label>
+    <div class="code">{{ output or "no output yet" }}</div>
+  </div>
+</section>
+{% endblock %}
