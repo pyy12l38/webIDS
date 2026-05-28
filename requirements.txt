@@ -1,0 +1,13 @@
+# 项目主运行环境依赖
+# 当前主系统以 Flask Proxy 型 IDS 为核心，同时保留 Django/Vue 并行迁移目录。
+# 机器学习模块已支持离线训练与在线辅助推理，因此补充 scikit-learn 相关运行依赖。
+
+Flask>=3.0,<4.0
+requests>=2.31,<3.0
+Django>=5.2,<6.0
+djangorestframework>=3.16,<4.0
+django-cors-headers>=4.7,<5.0
+numpy>=1.26,<3.0
+scipy>=1.11,<2.0
+joblib>=1.4,<2.0
+scikit-learn>=1.5,<2.0
